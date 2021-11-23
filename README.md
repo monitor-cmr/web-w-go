@@ -22,3 +22,35 @@
    1. curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s
    2. sudo mv ./bin/air /usr/local/go/bin/
    3. air -v
+
+## Day 02
+
+1. Set up a hello world REST GIN framework.
+2. Using Memory as backend storage.
+3. How to code.
+   1. Create `mkdir rest` folder && `cd rest`
+   2. `go mod init github.com/monitor-cmr/web-w-go`
+   3. `go get -u github.com/gin-gonic/gin`
+4. Install Auto Reload
+   1. `air init`
+5. Design API Endpoint.
+
+   | REST HTTP Request   | CRUD     | GIN Methods  |
+   |---------------------|----------|--------------|
+   | POST                | Create   | GIN.POST     |
+   | GET                 | Read     | GIN.GET      |
+   | PUT                 | Update   | GIN.PUT      |
+   | DELETE              | Delete   | GIN.DELETE   |
+
+6. Albums request URL
+
+   | REST HTTP Request   | CRUD     | GIN Methods    | Description      |
+   |---------------------|----------|----------------|------------------|
+   | `/albums`           | Read     | `GIN.GET`      | Get all albums   |
+   | `/albums`           | Create   | `GIN.POST`     | Create an albums |
+   | `/albums/:id`       | Read     | `GIN.GET`      | Get an albums    |
+   | `/albums/:id`       | Update   | `GIN.PUT`      | Update an albums |
+   | `/albums/:id`       | Delete   | `GIN.DELETE`   | Delete an albums |
+
+7. Create `main.go` - en entrypoint file
+
