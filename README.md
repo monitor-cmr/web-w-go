@@ -52,5 +52,5 @@
    | `/albums/:id`       | Update   | `GIN.PUT`      | Update an albums |
    | `/albums/:id`       | Delete   | `GIN.DELETE`   | Delete an albums |
 
-7. Create `main.go` - en entrypoint file
+7. Create [`main.go`](rest/main.go) - en entrypoint file
 
