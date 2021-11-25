@@ -35,22 +35,49 @@
    1. `air init`
 5. Design API Endpoint.
 
-   | REST HTTP Request   | CRUD     | GIN Methods  |
-   |---------------------|----------|--------------|
-   | POST                | Create   | GIN.POST     |
-   | GET                 | Read     | GIN.GET      |
-   | PUT                 | Update   | GIN.PUT      |
-   | DELETE              | Delete   | GIN.DELETE   |
+   | REST HTTP Request | CRUD   | GIN Methods |
+   |-------------------|--------|-------------|
+   | POST              | Create | GIN.POST    |
+   | GET               | Read   | GIN.GET     |
+   | PUT               | Update | GIN.PUT     |
+   | DELETE            | Delete | GIN.DELETE  |
 
 6. Albums request URL
 
-   | REST HTTP Request   | CRUD     | GIN Methods    | Description      |
-   |---------------------|----------|----------------|------------------|
-   | `/albums`           | Read     | `GIN.GET`      | Get all albums   |
-   | `/albums`           | Create   | `GIN.POST`     | Create an albums |
-   | `/albums/:id`       | Read     | `GIN.GET`      | Get an albums    |
-   | `/albums/:id`       | Update   | `GIN.PUT`      | Update an albums |
-   | `/albums/:id`       | Delete   | `GIN.DELETE`   | Delete an albums |
+   | REST HTTP Request | CRUD   | GIN Methods | Description      |
+   |-------------------|--------|-------------|------------------|
+   | /albums           | Read   | GIN.GET     | Get all albums   |
+   | /albums           | Create | GIN.POST    | Create an albums |
+   | /albums/:id       | Read   | GIN.GET     | Get an albums    |
+   | /albums/:id       | Update | GIN.PUT     | Update an albums |
+   | /albums/:id       | Delete | GIN.DELETE  | Delete an albums |
 
 7. Create [`main.go`](rest/main.go) - en entrypoint file
 
+
+## Day 03
+
+1. Declaration of an album struct. You’ll use this to store album data in memory.
+
+   ```go
+   // album represents data about a record album.
+   type album struct {
+      ID     int
+      Title  string
+      Artist string
+      Price  float64
+   }
+   ```
+
+2. Declaration a slice of album structs containing data
+
+   ```go
+   // albums slice to seed record album data.
+   var albums = []album{
+       {ID: 1, Title: "Blue Train", Artist: "John Coltrane", Price: 56.99},
+       {ID: 2, Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
+       {ID: 3, Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
+   }
+   ```
+
+3. Implement the `getAlbums` function in `main.go`
