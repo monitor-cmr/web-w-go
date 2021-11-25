@@ -57,7 +57,15 @@
 
 ## Day 03
 
-1. Declaration of an album struct. You’ll use this to store album data in memory.
+1. Define Table albums in database
+
+   | ID | Title                            | Artist         | Price |
+   |----|----------------------------------|----------------|-------|
+   | 1  | Blue Train                       | John Coltrane  | 56.99 |
+   | 2  | Jeru                             | Gerry Mulligan | 17.99 |
+   | 3  | Sarah Vaughan and Clifford Brown | Sarah Vaughan  | 39.99 |
+
+2. Declaration of an album struct. You’ll use this to store album data in memory.
 
    ```go
    // album represents data about a record album.
@@ -69,7 +77,7 @@
    }
    ```
 
-2. Declaration a slice of album structs containing data
+3. Declaration a slice of album structs containing data  - Memory Database
 
    ```go
    // albums slice to seed record album data.
@@ -80,4 +88,4 @@
    }
    ```
 
-3. Implement the `getAlbums` function in `main.go`
+4. Implement the `getAlbums` function in `main.go`
