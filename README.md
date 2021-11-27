@@ -54,7 +54,6 @@
 
 7. Create [`main.go`](rest/main.go) - en entrypoint file
 
-
 ## Day 03
 
 1. Define Table albums in database
@@ -88,8 +87,13 @@
    }
    ```
 
-4. Implement the `getAlbums` function in `main.go`
+4. Working on Method POST - Create an albums
 
+   | REST HTTP Request | CRUD   | GIN Methods | Description      |
+   |-------------------|--------|-------------|------------------|
+   | /albums           | Read   | GIN.GET     | Get all albums   |
+
+5. Implement the `getAlbums` function in `main.go`
 
 ## Day 04
 
@@ -135,7 +139,7 @@
    |-------------------|--------|-------------|------------------|
    | /albums/:id       | Get    | GIN.GET     | Get an albums    |
 
-2. Implement the `gettAlbumsByID` function - Method GET
+2. Implement the `getAlbumsByID` function - Method GET
 
    ```go
    import (
@@ -146,28 +150,76 @@
    )
 
    func getAlbumsByID(c *gin.Context) {
-        // /albums/:id => c.Param("id") => string value
-        tempID := c.Param("id")
+    // /albums/:id => c.Param("id") => string value
+    tempID := c.Param("id")
 
-        // Convert string to int
-        id, err := strconv.Atoi(tempID)
-        if err != nil {
-            c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+    // Convert string to int
+    id, err := strconv.Atoi(tempID)
+    if err != nil {
+        c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+        return
+    }
+
+    // Loop over the list of albums, looking for
+    // an album whose ID value matches the parameter.
+    for _, a := range albums {
+        if a.ID == id {
+            c.IndentedJSON(http.StatusOK, gin.H{"data": a})
             return
         }
+      }
 
-        // Loop over the list of albums, looking for
-        // an album whose ID value matches the parameter.
-        for _, a := range albums {
-            if a.ID == id {
-                c.IndentedJSON(http.StatusOK, a)
-                return
-            }
-       }
-
-       // response to user request
-        c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+      // response to user request
+      c.IndentedJSON(http.StatusNotFound, gin.H{"data": "album not found"})
    }
    ```
 
 3. curl -XGET http://127.0.0.1:8080/albums/1
+
+## Day 06
+
+1. Working on Method POST - Create an albums
+
+   | REST HTTP Request | CRUD   | GIN Methods | Description      |
+   |-------------------|--------|-------------|------------------|
+   | /albums/:id       | Put    | GIN.PUT     | Update a albums  |
+
+2. Implement the `putAlbums` function - Method GET
+
+   ```go
+    // /albums/:id => c.Param("id") => string value
+    tempID := c.Param("id")
+
+    // Convert string to int
+    id, err := strconv.Atoi(tempID)
+    if err != nil {
+        c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+        return
+    }
+
+   var updateAlbum album
+
+   // Call BindJSON to bind the received JSON to updateAlbum.
+   if err := c.BindJSON(&updateAlbum); err != nil {
+      c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+      return
+   }
+
+   // Assign updateAlbum to id in Request URL
+   updateAlbum.ID = id
+
+    // Loop over the list of albums, looking for
+    // an album whose ID value matches the parameter.
+    for i, a := range albums {
+        if a.ID == id {
+         albums[i] = updateAlbum
+            c.IndentedJSON(http.StatusOK, gin.H{"data": updateAlbum.ID})
+            return
+        }
+   }
+
+   // response to user request
+   c.IndentedJSON(http.StatusNotFound, gin.H{"data": "album not found"})
+   ```
+
+3. curl -XPUT -d @updateAlbum.json http://127.0.0.1:8080/albums/3

@@ -35,7 +35,7 @@ func main() {
     // curl -XGET http://127.0.0.1:8080/albums/[1-n] - method GET
     router.GET("/albums/:id", getAlbumsByID)
 
-    // curl -XPUT http://127.0.0.1:8080/albums/[1-n] - method PUT
+    // curl -XPUT -d @updateAlbum.json http://127.0.0.1:8080/albums/[1-n] - method PUT
     router.PUT("/albums/:id", putAlbums)
 
     // http://127.0.0.1:8080/albums/[1-n] - method DELETE
@@ -95,22 +95,55 @@ func getAlbumsByID(c *gin.Context) {
     // an album whose ID value matches the parameter.
     for _, a := range albums {
         if a.ID == id {
-            c.IndentedJSON(http.StatusOK, a)
+            c.IndentedJSON(http.StatusOK, gin.H{"data": a})
             return
         }
     }
 
     // response to user request
-    c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+    c.IndentedJSON(http.StatusNotFound, gin.H{"data": "album not found"})
     // c.IndentedJSON(http.StatusOK, gin.H{"data": "Get an albums"})
 }
 
 // putAlbums ...
 func putAlbums(c *gin.Context) {
-    c.IndentedJSON(http.StatusOK, gin.H{"data": "Update an albums"})
+    // /albums/:id => c.Param("id") => string value
+    tempID := c.Param("id")
+
+    // Convert string to int
+    id, err := strconv.Atoi(tempID)
+    if err != nil {
+        c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+        return
+    }
+
+    var updateAlbum album
+
+    // Call BindJSON to bind the received JSON to updateAlbum.
+    if err := c.BindJSON(&updateAlbum); err != nil {
+        c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+        return
+    }
+
+    // Assign updateAlbum to id in Request URL
+    updateAlbum.ID = id
+
+    // Loop over the list of albums, looking for
+    // an album whose ID value matches the parameter.
+    for i, a := range albums {
+        if a.ID == id {
+            albums[i] = updateAlbum
+            c.IndentedJSON(http.StatusOK, gin.H{"data": updateAlbum.ID})
+            return
+        }
+    }
+
+    // response to user request
+    c.IndentedJSON(http.StatusNotFound, gin.H{"data": "album not found"})
 }
 
 // deleteAlbums ...
 func deleteAlbums(c *gin.Context) {
     c.IndentedJSON(http.StatusOK, gin.H{"data": "Delete an albums"})
 }
+
