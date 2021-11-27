@@ -89,3 +89,40 @@
    ```
 
 4. Implement the `getAlbums` function in `main.go`
+
+
+## Day 04
+
+1. Working on Method POST - Create an albums
+
+   | REST HTTP Request | CRUD   | GIN Methods | Description      |
+   |-------------------|--------|-------------|------------------|
+   | /albums           | Create | GIN.POST    | Create an albums |
+
+2. Implement the `postAlbums` function - Method POST
+
+   ```go
+   var newAlbum album
+
+    // Call BindJSON to bind the received JSON to newAlbum.
+    if err := c.BindJSON(&newAlbum); err != nil {
+    c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+        return
+    }
+
+    // Get a length of albums
+    lenAlbum := len(albums)
+
+   // Get a last album's ID
+    // - index start 0
+    // - a last album = length - 1 => lenAlbum - 1
+    newAlbum.ID = albums[lenAlbum-1].ID + 1
+
+    // Add the new album to the slice.
+    albums = append(albums, newAlbum)
+
+    // response to user request
+    c.IndentedJSON(http.StatusCreated, gin.H{"data": newAlbum.ID})
+   ```
+
+3. curl -XPOST -d @createAlbum.json http://127.0.0.1:8080/albums
