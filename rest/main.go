@@ -2,6 +2,7 @@ package main
 
 import (
     "net/http"
+    "strconv"
 
     "github.com/gin-gonic/gin"
 )
@@ -79,6 +80,28 @@ func postAlbums(c *gin.Context) {
 
 // getAlbumsByID ...
 func getAlbumsByID(c *gin.Context) {
+    // /albums/:id => c.Param("id") => string value
+    tempID := c.Param("id")
+
+    // Convert string to int
+    id, err := strconv.Atoi(tempID)
+
+    if err != nil {
+        c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+        return
+    }
+
+    // Loop over the list of albums, looking for
+    // an album whose ID value matches the parameter.
+    for _, a := range albums {
+        if a.ID == id {
+            c.IndentedJSON(http.StatusOK, a)
+            return
+        }
+    }
+
+    // response to user request
+    c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
     // c.IndentedJSON(http.StatusOK, gin.H{"data": "Get an albums"})
 }
 
@@ -91,4 +114,3 @@ func putAlbums(c *gin.Context) {
 func deleteAlbums(c *gin.Context) {
     c.IndentedJSON(http.StatusOK, gin.H{"data": "Delete an albums"})
 }
-

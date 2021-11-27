@@ -126,3 +126,48 @@
    ```
 
 3. curl -XPOST -d @createAlbum.json http://127.0.0.1:8080/albums
+
+## Day 05
+
+1. Working on Method POST - Create an albums
+
+   | REST HTTP Request | CRUD   | GIN Methods | Description      |
+   |-------------------|--------|-------------|------------------|
+   | /albums/:id       | Get    | GIN.GET     | Get an albums    |
+
+2. Implement the `gettAlbumsByID` function - Method GET
+
+   ```go
+   import (
+    "net/http"
+    "strconv"
+
+    "github.com/gin-gonic/gin"
+   )
+
+   func getAlbumsByID(c *gin.Context) {
+        // /albums/:id => c.Param("id") => string value
+        tempID := c.Param("id")
+
+        // Convert string to int
+        id, err := strconv.Atoi(tempID)
+        if err != nil {
+            c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+            return
+        }
+
+        // Loop over the list of albums, looking for
+        // an album whose ID value matches the parameter.
+        for _, a := range albums {
+            if a.ID == id {
+                c.IndentedJSON(http.StatusOK, a)
+                return
+            }
+       }
+
+       // response to user request
+        c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+   }
+   ```
+
+3. curl -XGET http://127.0.0.1:8080/albums/1
