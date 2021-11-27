@@ -178,7 +178,7 @@
 
 ## Day 06
 
-1. Working on Method POST - Create an albums
+1. Working on Method PUT - Create an albums
 
    | REST HTTP Request | CRUD   | GIN Methods | Description      |
    |-------------------|--------|-------------|------------------|
@@ -223,3 +223,58 @@
    ```
 
 3. curl -XPUT -d @updateAlbum.json http://127.0.0.1:8080/albums/3
+
+## Day 07
+
+1. Working on Method DELETE - Create an albums
+
+   | REST HTTP Request | CRUD   | GIN Methods | Description      |
+   |-------------------|--------|-------------|------------------|
+   | /albums/:id       | Delete | GIN.DELETE  | Delete a albums  |
+
+2. Implement the `deleteAlbums` function - Method DELETE
+
+   ```go
+    // /albums/:id => c.Param("id") => string value
+    tempID := c.Param("id")
+
+    // Convert string to int
+    id, err := strconv.Atoi(tempID)
+    if err != nil {
+        c.IndentedJSON(http.StatusBadRequest, gin.H{"data": "Bad Request"})
+        return
+    }
+
+    // Loop over the list of albums, looking for
+    // an album whose ID value matches the parameter.
+    for i, a := range albums {
+        if a.ID == id {
+            // i->length(albums)
+            // albums = [1,2,3]
+            // index = 0,1,2
+            // tempAbum = len(albums) - 1 => 2
+            tempAlbum := make([]album, len(albums)-1)
+
+            // 0->i
+            // found an ID at index = 1
+            // cp albums[:index] => tempAlbum[:index]
+            copy(tempAlbum[:i], albums[:i])
+
+            // Move to index + 1
+            // cp albums[index+1:] => tempAlbum[index:]
+            copy(tempAlbum[i:], albums[i+1:])
+
+            // assign albums to tempAlbum
+            albums = tempAlbum
+
+            // response to user request
+            c.IndentedJSON(http.StatusOK, gin.H{"data": "Delete an albums"})
+            return
+        }
+    }
+
+   // response to user request
+   c.IndentedJSON(http.StatusNotFound, gin.H{"data": "album not found"})
+   ```
+
+3. curl -XDELETE http://127.0.0.1:8080/albums/3
