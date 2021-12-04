@@ -278,3 +278,35 @@
    ```
 
 3. curl -XDELETE http://127.0.0.1:8080/albums/3
+
+## Day 08
+
+1. folder structure
+
+   ```bash
+   .
+   ├── createAlbum.json
+   ├── go.mod
+   ├── go.sum
+   ├── main.go
+   ├── router
+   │   └── route.go
+   └── updateAlbum.json
+   ```
+
+2. Create `router/route.go` file
+3. Content [`router/route.go`](rest/router/route.go) file
+4. Content `main.go` file
+   ```go
+   package main
+
+   import "github.com/monitor-cmr/web-w-go/router"
+
+   func main() {
+    // Get gin.Engine from router/route.go
+    route := router.Router()
+
+    // Run App
+    route.Run(":8080")
+   }
+   ```
