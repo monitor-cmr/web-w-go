@@ -403,3 +403,17 @@
    ```
 
 3. Content [`handler/album.go`](rest/handler/album.go) file
+
+## Day 11
+
+1. Declare AlbumRepository Interface `domain/album.go` file
+   
+   ```go
+    type AlbumRepository interface {
+      SelectAll() ([]Album, error)
+      Select(int) (*Album, error)
+      Save(Album) (*int, error)
+      Update(Album) error
+      Delete(int) error
+   }
+   ```
