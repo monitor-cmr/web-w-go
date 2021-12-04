@@ -45,6 +45,14 @@ func (a *AlbumMemory) Select(id int) (*domain.Album, error) {
 
 // Save ...
 func (a *AlbumMemory) Save(album domain.Album) (*int, error) {
+    // Get a length of albums
+    lenAlbum := len(a.albums)
+
+    // Get a last album's ID
+    // - index start 0
+    // - a last album = length - 1 => lenAlbum - 1
+    album.ID = a.albums[lenAlbum-1].ID + 1
+    
     a.albums = append(a.albums, album)
     return &album.ID, nil
 }
