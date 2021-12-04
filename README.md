@@ -417,3 +417,28 @@
       Delete(int) error
    }
    ```
+
+## Day 12
+
+1. Folder structure
+
+   ```bash
+   .
+   ├── createAlbum.json
+   ├── domain
+   │   └── album.go
+   ├── go.mod
+   ├── go.sum
+   ├── handler
+   │   └── album.go
+   ├── main.go
+   ├── router
+   │   └── route.go
+   ├── storage
+   │   └── memory
+   │       └── album.go
+   └── updateAlbum.json
+   ```
+
+2. Create [`storage/memory/album.go`](rest/storage/memory/album.go)
+3. Implement all method in `AlbumRepository interface`
