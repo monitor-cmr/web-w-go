@@ -7,3 +7,13 @@ type Album struct {
     Artist string
     Price  float64
 }
+
+// AlbumRepository ...
+type AlbumRepository interface {
+    SelectAll() ([]Album, error)
+    Select(int) (*Album, error)
+    Save(Album) (*int, error)
+    Update(Album) error
+    Delete(int) error
+}
+
