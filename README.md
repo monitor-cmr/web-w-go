@@ -368,3 +368,38 @@
     return router
    }
    ```
+
+## Day 10
+
+1. folder structure
+
+   ```bash
+   .
+   ├── createAlbum.json
+   ├── domain
+   │   └── album.go
+   ├── go.mod
+   ├── go.sum
+   ├── handler
+   │   └── album.go
+   ├── main.go
+   ├── router
+   │   └── route.go
+   └── updateAlbum.json
+   ```
+
+2. Create `domain/album.go` file
+
+   ```go
+   package domain
+
+   // Album represents data about a record album.
+   type Album struct {
+    ID     int
+    Title  string
+    Artist string
+    Price  float64
+   }
+   ```
+
+3. Content [`handler/album.go`](rest/handler/album.go) file
