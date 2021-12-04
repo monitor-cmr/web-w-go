@@ -11,8 +11,10 @@ func Router() *gin.Engine {
 
     // Albums - Start
 
+    // Create Memory storage
+    store := memory.NewAlbumMemory()
     // Create a new AlbumHandler
-    al := handler.NewAlbumHandler()
+    al := handler.NewAlbumHandler(store)
 
     // curl -XGET http://127.0.0.1:8080/albums
     router.GET("/albums", al.GetAlbums)

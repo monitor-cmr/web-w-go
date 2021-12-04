@@ -442,3 +442,65 @@
 
 2. Create [`storage/memory/album.go`](rest/storage/memory/album.go)
 3. Implement all method in `AlbumRepository interface`
+
+## Day 13
+
+1. Update [`handler/album.go`](rest/handler/album.go) to use `AlbumRepository interface`
+
+   ```go
+   // AlbumHandler ...
+   type AlbumHandler struct {
+    repo domain.AlbumRepository
+   }
+
+   // NewAlbumHandler ...
+   func NewAlbumHandler(re domain.AlbumRepository) *AlbumHandler {
+    return &AlbumHandler{
+        repo: re,
+    }
+   }
+   ...
+   ```
+
+2. Update `router/route.go` to create `memory.NewAlbumMemory` storage
+
+   ```go
+   package router
+
+   import (
+    "github.com/gin-gonic/gin"
+    "github.com/monitor-cmr/web-w-go/handler"
+    "github.com/monitor-cmr/web-w-go/storage/memory"
+   )
+
+   // Router ...
+   func Router() *gin.Engine {
+    router := gin.Default()
+
+    // Albums - Start
+
+    // Create Memory storage
+    store := memory.NewAlbumMemory()
+    // Create a new AlbumHandler
+    al := handler.NewAlbumHandler(store)
+
+    // curl -XGET http://127.0.0.1:8080/albums
+    router.GET("/albums", al.GetAlbums)
+
+    // curl -XPOST -d @createAlbum.json http://127.0.0.1:8080/albums
+    router.POST("/albums", al.PostAlbums)
+
+    // curl -XGET http://127.0.0.1:8080/albums/[1-n] - method GET
+    router.GET("/albums/:id", al.GetAlbumsByID)
+
+    // curl -XPUT -d @updateAlbum.json http://127.0.0.1:8080/albums/[1-n] - method PUT
+    router.PUT("/albums/:id", al.PutAlbums)
+
+    // curl -XDELETE http://127.0.0.1:8080/albums/[1-n] - method DELETE
+    router.DELETE("/albums/:id", al.DeleteAlbums)
+
+    // Albums - End
+
+    return router
+   }
+   ```
