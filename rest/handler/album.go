@@ -6,24 +6,26 @@ import (
 
     "github.com/gin-gonic/gin"
     "github.com/monitor-cmr/web-w-go/domain"
+    "github.com/monitor-cmr/web-w-go/service"
 )
 
 // AlbumHandler ...
 type AlbumHandler struct {
-    repo domain.AlbumRepository
+    // repo domain.AlbumRepository
+    repo service.AlbumServiceRepository
 }
 
 // NewAlbumHandler ...
-func NewAlbumHandler(re domain.AlbumRepository) *AlbumHandler {
+func NewAlbumHandler(svc service.AlbumServiceRepository) *AlbumHandler {
     return &AlbumHandler{
-        repo: re,
+        repo: svc,
     }
 }
 
 // GetAlbums ...
 func (al AlbumHandler) GetAlbums(c *gin.Context) {
     // c.IndentedJSON(http.StatusOK, gin.H{"data": "Get all albums"})
-    albums, err := al.repo.SelectAll()
+    albums, err := al.repo.FetchAll()
     if err != nil {
         c.IndentedJSON(http.StatusInternalServerError, gin.H{"data": "Server Internal Error"})
         return
@@ -64,7 +66,7 @@ func (al AlbumHandler) GetAlbumsByID(c *gin.Context) {
         return
     }
 
-    album, err := al.repo.Select(id)
+    album, err := al.repo.Fetch(id)
     if err != nil {
         c.IndentedJSON(http.StatusNotFound, gin.H{"data": "album not found"})
         return

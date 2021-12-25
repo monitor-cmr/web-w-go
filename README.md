@@ -407,7 +407,7 @@
 ## Day 11
 
 1. Declare AlbumRepository Interface `domain/album.go` file
-   
+
    ```go
     type AlbumRepository interface {
       SelectAll() ([]Album, error)
@@ -504,3 +504,46 @@
     return router
    }
    ```
+
+## Day 14
+
+1. Folder structure
+
+   ```bash
+   .
+   ├── createAlbum.json
+   ├── domain
+   │   └── album.go
+   ├── go.mod
+   ├── go.sum
+   ├── handler
+   │   └── album.go
+   ├── main.go
+   ├── router
+   │   └── route.go
+   ├── service
+   │   └── album.go
+   ├── storage
+   │   └── memory
+   │       └── album.go
+   └── updateAlbum.json
+   ```
+
+2. Declare `Service Interface`
+
+   ```go
+   // AlbumServiceRepository ....
+   type AlbumServiceRepository interface {
+    FetchAll() ([]domain.Album, error)
+    Fetch(int) (*domain.Album, error)
+    Save(domain.Album) (*int, error)
+    Update(domain.Album) error
+    Delete(int) error
+   }
+   ```
+
+3. Implement all method in `Service Interface` in [service/album.go](rest/service/album.go)
+
+## Day 15
+
+1. Data Transfer Object

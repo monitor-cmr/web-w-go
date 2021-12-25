@@ -3,6 +3,8 @@ package router
 import (
     "github.com/gin-gonic/gin"
     "github.com/monitor-cmr/web-w-go/handler"
+    "github.com/monitor-cmr/web-w-go/service"
+    "github.com/monitor-cmr/web-w-go/storage/memory"
 )
 
 // Router ...
@@ -13,8 +15,10 @@ func Router() *gin.Engine {
 
     // Create Memory storage
     store := memory.NewAlbumMemory()
+    // Create AlbumService
+    svcAlbum := service.NewAlbumService(store)
     // Create a new AlbumHandler
-    al := handler.NewAlbumHandler(store)
+    al := handler.NewAlbumHandler(svcAlbum)
 
     // curl -XGET http://127.0.0.1:8080/albums
     router.GET("/albums", al.GetAlbums)
