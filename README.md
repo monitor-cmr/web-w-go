@@ -546,4 +546,69 @@
 
 ## Day 15
 
-1. Data Transfer Object
+1. MySQL with Docker
+   1. docker run --name mysql8 -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:8.0
+   2. docker container inspect mysql8 |grep IPAddress
+   3. docker exec -it mysql8 bash
+   4. mysql -u root -p
+   5. CREATE DATABASE MYSQLTEST;
+   6. use MYSQLTEST
+   7. Create albums table
+
+      ```sql
+      CREATE TABLE albums (
+         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+         title VARCHAR(30) NOT NULL,
+         artist VARCHAR(30) NOT NULL,
+         price FLOAT(50,2)
+      );
+      ```
+
+   8. Insert data into table
+
+      ```sql
+      insert into albums(title, artist, price) values("Blue Train", "John Coltrane", 56.99);
+        insert into albums(title, artist, price) values("Jeru", "Gerry Mulligan", 17.99);
+        insert into albums(title, artist, price) values("Sarah Vaughan and Clifford", "Sarah Vaughan", 39.99);
+      ```
+
+   9. Create MySQL User
+      ```sql
+      CREATE USER 'alochym'@'%' IDENTIFIED BY 'alochym@123';
+      GRANT ALL ON MYSQLTEST.* TO 'alochym'@'%';
+      ```
+
+2. Storage layer using MySQL
+   1. Create [`storage/mysql/album.go`](rest/storage/mysql/album.go)
+3. Create MySQL Connection function in `main.go` file
+
+   ```go
+   // MysqlConn ...
+   func MysqlConn(host string, port int64, username, password, dbname string) *sql.DB {
+    dbSource := fmt.Sprintf(
+        "%s:%s@tcp(%s:%d)/%s?charset=utf8",
+        username,
+        password,
+        host,
+        port,
+        dbname,
+    )
+
+    dbConn, err := sql.Open("mysql", dbSource)
+
+    if err != nil {
+        fmt.Println(err)
+        panic(err)
+    }
+
+    return dbConn
+   }
+   ```
+
+4. Implement all methods in [`AlbumRepository interface`](rest/storage/mysql/album.go)
+5. Update router/router using Storage with MySQL
+   ```go
+    // Create Memory storage
+   store := memory.NewAlbumMySQL()
+   ```
+

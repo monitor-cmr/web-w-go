@@ -1,22 +1,30 @@
 package router
 
 import (
+    "database/sql"
+
     "github.com/gin-gonic/gin"
     "github.com/monitor-cmr/web-w-go/handler"
     "github.com/monitor-cmr/web-w-go/service"
-    "github.com/monitor-cmr/web-w-go/storage/memory"
+    "github.com/monitor-cmr/web-w-go/storage/mysql"
 )
 
 // Router ...
-func Router() *gin.Engine {
+// func Router() *gin.Engine {
+func Router(db *sql.DB) *gin.Engine {
     router := gin.Default()
 
     // Albums - Start
 
-    // Create Memory storage
-    store := memory.NewAlbumMemory()
+    // // Create Memory storage
+    // store := memory.NewAlbumMemory()
+
+    // // Create MySQL storage
+    store := mysql.NewAlbumMySQL(db)
+
     // Create AlbumService
     svcAlbum := service.NewAlbumService(store)
+
     // Create a new AlbumHandler
     al := handler.NewAlbumHandler(svcAlbum)
 
